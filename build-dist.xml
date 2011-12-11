@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="build_dist" name="Create Runnable Jar for Project MouseClient">
+
+	<property name="lib.dir" value="support/svnant" />
+	<property name="launch4j.dir" value="support/launch4j" />
+
+	<condition property="l4jbin.dir" value="${launch4j.dir}/bin.Windows" else="${launch4j.dir}/bin.${os.name}">
+		<os family="windows"/>
+	</condition>
+
+	<!-- path to the svnant libraries. Usually they will be located in ANT_HOME/lib -->
+	<path id="svnant.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+	
+
+	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath" />
+	<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"  classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+
+	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+	<!--ANT 1.7 is required                                        -->
+	<target name="build_dist" depends="version">
+		<mkdir dir="dist"/>
+		<mkdir dir="bin"/>
+
+		<jar destfile="dist/MouseClient.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="org.mouseclient.client.MouseClient" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Implementation-Version" value="${revision.max}" />
+				<attribute name="SVN-Revision" value="${revision.max}" />
+				<attribute name="SVN-Repository" value="${repository.url}" />
+			</manifest>
+			<fileset dir="bin" />
+			<zipfileset excludes="META-INF/*.SF" src="libs/jmdns.jar" />
+		</jar>
+
+		<!-- create zip distribution -->
+		<zip destfile="dist/MouseClient-r${revision.max}.zip">
+			<fileset file="dist/MouseClient.jar" casesensitive="yes" />
+			<fileset file="COPYING" casesensitive="yes" />
+		</zip>
+
+	</target>
+
+	<target name="version">
+		<svnSetting id="svn" javahl="false" /> 
+		<svn refid="svn">
+			<wcVersion path="." />
+		</svn>
+		<echo message="Revision Information:" />
+		<echo message="Subversion revision: ${revision.max}" />
+		<echo message="Subversion repository url: ${repository.url}" />
+		<echo message="Build platform: ${os.name}" />
+	</target>
+
+</project>
