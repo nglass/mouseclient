@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with TunesRemote SE; if not, write to the Free Software
+ * along with MouseClient; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  * 
  * Copyright 2011 Nick Glass
@@ -61,7 +61,7 @@ public class MouseService extends Thread implements ServiceListener, NetworkTopo
             jmmdns.close();
          }
       } catch (IOException e) {
-         Log.e(TAG, "Exception shutting down TunesService", e);
+         Log.e(TAG, "Exception shutting down MouseService", e);
       }
    }
 
@@ -133,7 +133,7 @@ public class MouseService extends Thread implements ServiceListener, NetworkTopo
                if (instance != null) {
                   instance.close();
                }
-               Log.i(TAG, "TunesService Stopped");
+               Log.i(TAG, "MouseService Stopped");
             }
          });
       }
